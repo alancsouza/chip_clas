@@ -13,7 +13,7 @@ import copy
 import concurrent.futures
 random.seed(1)
 
-# Compute Adjacency matrix
+# Compute Adjacency matrix for the Grabriel Graph
 def get_adjacency(X):
   dist_matrix = distance_matrix(X,X)
   Adj_matrix = np.zeros(shape = dist_matrix.shape)
@@ -231,10 +231,35 @@ def parallel_graph(X_train, y_train, split_size):
   
   return X_train_new, y_train_new
 
-# Gabriel Graph classifier
-def gg_clas(X_train, y_train, X_test, y_test):
+def compute_pseudo_support_edges(data, scale_factor = 10):
+  # separating the lables
+  c1 = data[data.iloc[:,-1] ==  1]
+  c2 = data[data.iloc[:,-1] == -1]
 
-  X_train, y_train = remove_noise(X_train,y_train)
+  # Choosing one random reference sample from each class
+  c1_reference = c1.sample(n = 1)
+  c2_reference = c2.sample(n = 1)
+
+  # Compute the distance matrix between each sample and the opposite class
+  dist_c1 = distance_matrix(c2_reference, c1)
+  dist_c2 = distance_matrix(c1_reference, c2)
+
+  n_edges  = int(data.shape[0] / scale_factor)  # number of pseudo support edges 
+  
+  # Indices from the n smallests support edges
+  idx_c1 = np.argpartition(dist_c1, n_edges) 
+  idx_c2 = np.argpartition(dist_c2, n_edges) 
+
+  c1_support_edges = c1.iloc[idx_c1[0,:n_edges]]
+  c2_support_edges = c2.iloc[idx_c2[0,:n_edges]]
+
+  pseudo_support_edges = np.array(pd.concat([c1_support_edges, c2_support_edges]))
+
+  return pseudo_support_edges
+
+# Gabriel Graph classifier using nn_clas method
+def nn_clas(X_train, y_train, X_test, y_test):
+
   data_train = np.c_[X_train, y_train]
   arestas_suporte = support_edges(data_train)
   y_hat = classify_data(X_test, y_test, arestas_suporte)
@@ -265,32 +290,85 @@ def parallel_concurrent(X_train, y_train, X_test, y_test):
 
   return y_hat
 
+def pseudo_support_edges(X_train, y_train, X_test, y_test):
+  
+  data_train = pd.concat([X_train, y_train], axis = 1)
+  support_edges = compute_pseudo_support_edges(data_train, 10) #ToDo: optmize the number of edges
+  y_hat = classify_data(X_test, y_test, support_edges)
 
-def chip_clas(X, y, parallel_method = True, kfold = 0, test_size = 0.2):
+  return y_hat
+
+
+def chip_clas(X, y, method , kfold = 10, test_size = 0.2):
+
+  """
+    Available methods:
+    parallel: Implements concurrent futures and parallelization technique
+    nn_clas: Implements nn_clas classification
+    pseudo_support_edges = Implements pseudo_support method
+
+  """
+
   # Filtering data:
   X_new, y_new = remove_noise(X, y)
 
+  runtime
+
   if kfold > 0 :    
     kf = KFold(n_splits = kfold, shuffle = True, random_state = 1)
+
+    results = []
 
     for train_index, test_index in kf.split(X_new):
 
       X_train, X_test = X_new.iloc[train_index], X_new.iloc[test_index]
       y_train, y_test = y_new.iloc[train_index], y_new.iloc[test_index]
 
-      if parallel_method :
+      if method == "parallel" :
         y_hat = parallel_concurrent(X_train, y_train, X_test, y_test)      
 
-      else:
-        y_hat  = gg_clas(X_train, y_train, X_test, y_test)
+      elif method == "nn_clas":
+        y_hat  = nn_clas(X_train, y_train, X_test, y_test)
 
-  else:
+      elif method == "pseudo_support_edges" :
+        y_hat = pseudo_support_edges(X_train, y_train, X_test, y_test)
+
+      else :
+        print("Method not available")
+        return None
+
+      AUC = compute_AUC(y_test, y_hat)
+      results.append(AUC)
+
+    results = pd.DataFrame(results)
+      
+
+
+  elif kfold == 0:
+
     X_train, X_test, y_train, y_test = train_test_split(X_new, y_new, test_size)
 
-    if parallel_method :
-      y_hat = parallel_concurrent(X_train, y_train, X_test, y_test)      
+    if method == "parallel" :
+        y_hat = parallel_concurrent(X_train, y_train, X_test, y_test)      
 
-    else:
-      y_hat  = gg_clas(X_train, y_train, X_test, y_test)
+    elif method == "nn_clas":
+      y_hat  = nn_clas(X_train, y_train, X_test, y_test)
 
-  return y_hat, y_test
+    elif method == "pseudo_support_edges":
+      y_hat = pseudo_support_edges(X_train, y_train, X_test, y_test)
+
+    else :
+      print("Method not available")
+      return None
+
+    results = compute_AUC(y_test, y_hat)
+  else :
+    print("Error: kfold number invalid")
+
+
+  return y_hat, y_test, results
+
+
+
+
+  
