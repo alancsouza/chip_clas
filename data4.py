@@ -1,10 +1,6 @@
-# data4 = Haberman’s Survival
-
 from functions import *
 
 data_name = "Habermans Survival"
-result_name = "Result_Data4_parallel_16.csv"
-runtime_name = "Runtime_data4_16_parallel.csv"
 
 url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/haberman/haberman.data'
 data = pd.read_csv(url, sep=',', header=None, skiprows=1)
@@ -16,10 +12,24 @@ X = pd.DataFrame(min_max_scaler.fit_transform(X))
 y = data.iloc[:,-1].copy()
 y[y == 2] = -1
 
-print("The {} dataset has {} samples".format(data_name, X.shape[0]))
+# Filtering data:
+X_new, y_new = remove_noise(X, y)
 
-y_hat, y_test = chip_clas(X, y)
+# Comparing methods:
+method = ["nn_clas", "parallel", "pseudo_support_edges"]
 
-AUC = compute_AUC(y_test, y_hat)
+print("Dataset: {}".format(data_name))
 
-print("The AUC is: {}".format(AUC))
+for model in method:
+    y_hat, y_test, result, runtime = chip_clas(X_new, y_new, method = model, kfold = 4)
+
+    mean_AUC = result.mean()
+    std = result.std()
+
+    print(" \n Method: {0} \n Avarege AUC: {1:.4f} \n Std. Deviation {2:.4f} \n Avarege Runtime: {3:.4f} \n".format(model, mean_AUC[0], std[0], runtime.mean()[0]))
+
+    f = open("results.txt", "a+")
+    f.write("Dataset: %d \n", data_name)
+
+
+

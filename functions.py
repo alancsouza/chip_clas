@@ -69,8 +69,8 @@ def remove_noise(X, y):
   X_new = X.drop(noise)
   y_new = y.drop(noise)
   
-  print("{} samples where removed from the data. \n".format(X.shape[0]-X_new.shape[0]))
-  print("The data set now has {} samples ".format(X.shape[0]))
+  #print("{} samples where removed from the data. \n".format(X.shape[0]-X_new.shape[0]))
+  #print("The data set now has {} samples ".format(X.shape[0]))
 
   return X_new, y_new
 
@@ -309,12 +309,10 @@ def chip_clas(X, y, method , kfold = 10, test_size = 0.2):
 
   """
 
-  # Filtering data:
-  X_new, y_new = remove_noise(X, y)
+  runtime = []
 
-  runtime
+  if kfold > 0 : 
 
-  if kfold > 0 :    
     kf = KFold(n_splits = kfold, shuffle = True, random_state = 1)
 
     results = []
@@ -325,13 +323,19 @@ def chip_clas(X, y, method , kfold = 10, test_size = 0.2):
       y_train, y_test = y_new.iloc[train_index], y_new.iloc[test_index]
 
       if method == "parallel" :
+        start = time.time() 
         y_hat = parallel_concurrent(X_train, y_train, X_test, y_test)      
+        end = time.time()
 
       elif method == "nn_clas":
+        start = time.time()
         y_hat  = nn_clas(X_train, y_train, X_test, y_test)
+        end = time.time()
 
       elif method == "pseudo_support_edges" :
+        start = time.time()
         y_hat = pseudo_support_edges(X_train, y_train, X_test, y_test)
+        end = time.time()
 
       else :
         print("Method not available")
@@ -339,15 +343,17 @@ def chip_clas(X, y, method , kfold = 10, test_size = 0.2):
 
       AUC = compute_AUC(y_test, y_hat)
       results.append(AUC)
+      runtime.append(end-start)
 
     results = pd.DataFrame(results)
+    runtime = pd.DataFrame(runtime)
       
 
 
   elif kfold == 0:
 
     X_train, X_test, y_train, y_test = train_test_split(X_new, y_new, test_size)
-
+    start = time.time()
     if method == "parallel" :
         y_hat = parallel_concurrent(X_train, y_train, X_test, y_test)      
 
@@ -360,13 +366,14 @@ def chip_clas(X, y, method , kfold = 10, test_size = 0.2):
     else :
       print("Method not available")
       return None
-
+    end =  time.time()
+    runtime = end - start
     results = compute_AUC(y_test, y_hat)
   else :
     print("Error: kfold number invalid")
 
 
-  return y_hat, y_test, results
+  return y_hat, y_test, results, runtime
 
 
 
