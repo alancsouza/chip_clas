@@ -78,7 +78,7 @@ def remove_noise(X, y):
 # Split the data for concurrent computing
 def split(X_train, y_train):
     if X_train.shape[0] > 400: # define the slot size
-        split_size = round(X_train.shape[0]/100)
+        split_size = round(X_train.shape[0]/1000) # changing to 1000 for large data sets
     else:
         split_size = round(X_train.shape[0]/50)
 
