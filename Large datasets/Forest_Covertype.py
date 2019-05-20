@@ -1,4 +1,4 @@
-## Comparing nn-clas and par-clas in mnist dataset
+## Comparing nn-clas and par-clas in Forest Covertype dataset
 
 from chip_clas_new import chip_clas_new
 from chip_clas_new import chip_clas_new
