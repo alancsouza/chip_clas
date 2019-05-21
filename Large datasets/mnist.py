@@ -15,6 +15,10 @@ data_name = "mnist"
 X_train = X_train.reshape(60000, 784)
 X_test = X_test.reshape(10000, 784)
 
+# Small data due to memory error
+X_train = X_train[:10000,:]
+X_test = X_test[:1000,:]
+
 # re-scale the image data to values between (0.0,1.0]
 X_train = X_train.astype('float32') / 255.
 X_test = X_test.astype('float32') / 255.
