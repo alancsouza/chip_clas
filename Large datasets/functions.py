@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import pandas as pd
 import numpy.matlib # use repmat function
 from scipy.spatial import distance_matrix
@@ -11,7 +11,7 @@ import random
 import time
 import copy
 import concurrent.futures
-import jason
+#import jason
 random.seed(1)
 
 # Compute Adjacency matrix for the Grabriel Graph
@@ -299,16 +299,16 @@ def pseudo_support_edges(X_train, y_train, X_test, y_test):
 
   return y_hat
 
-
+"""
 def chip_clas(X, y, method , kfold = 10, test_size = 0.2):
 
-  """
+  
     Available methods:
     parallel: Implements concurrent futures and parallelization technique
     nn_clas: Implements nn_clas classification
     pseudo_support_edges = Implements pseudo_support method
 
-  """
+
 
   runtime = []
 
@@ -376,7 +376,7 @@ def chip_clas(X, y, method , kfold = 10, test_size = 0.2):
 
   return y_hat, y_test, results, runtime
 
-
+"""
 
 
   
