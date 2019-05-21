@@ -11,6 +11,10 @@ data_name = "mnist"
 
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
 
+# Reshaping the data
+X_train = X_train.reshape(60000, 784)
+X_test = X_test.reshape(10000, 784)
+
 # re-scale the image data to values between (0.0,1.0]
 X_train = X_train.astype('float32') / 255.
 X_test = X_test.astype('float32') / 255.
