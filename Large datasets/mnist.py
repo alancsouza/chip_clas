@@ -1,4 +1,3 @@
-
 ## Comparing nn-clas and par-clas in mnist dataset
 
 from keras.datasets import mnist
@@ -26,6 +25,13 @@ X_test = X_test.astype('float32') / 255.
 # Converting to binary classification problem, odd digits or even digits
 y_train_binary = (y_train % 2 == 0).astype(np.int)
 y_test_binary = (y_test % 2 == 0).astype(np.int)
+
+# Converting the numpy array to pandas data frame
+X_train = pd.DataFrame(X_train)
+X_test = pd.DataFrame(X_test)
+
+y_train_binary = pd.DataFrame(y_train_binary)
+y_test_binary = pd.DataFrame(y_test_binary)
 
 # Filtering data:
 X_train_new, y_train_new = remove_noise(X_train, y_train_binary)
