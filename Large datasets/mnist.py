@@ -3,6 +3,7 @@
 from keras.datasets import mnist
 from chip_clas_new import chip_clas_new
 from functions import remove_noise
+from sklearn.model_selection import train_test_split
 import numpy as np
 import pandas as pd
 
