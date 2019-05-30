@@ -2,8 +2,9 @@
 
 from keras.datasets import mnist
 from chip_clas_new import chip_clas_new
-from functions import remove_noise
+#from functions import remove_noise
 from sklearn.model_selection import train_test_split
+from sklearn.decomposition import PCA
 import numpy as np
 import pandas as pd
 
@@ -20,36 +21,21 @@ X_train = X_train.reshape(60000, 784)
 X_test = X_test.reshape(10000, 784)
 
 # making binary classification problem: 2 vs rest
-y_train_binary = (y_train % 2 == 0).astype(np.int)
-y_test_binary = (y_test % 2 == 0).astype(np.int)
+y_train = (y_train % 2 == 0).astype(np.int)
+y_test = (y_test % 2 == 0).astype(np.int)
 
-# getting a smaller subset of the mnist dataset
-Data_train = np.c_[X_train, y_train_binary]
-Data_test = np.c_[X_test, y_test_binary]
-Data_mnist = np.concatenate((Data_train, Data_test), axis = 0)
-Data_mnist = pd.DataFrame(Data_mnist)
+# Dimensionality reduction using PCA
+pca_train = PCA(n_components=16, svd_solver='randomized', whiten=True).fit(X_train)
+pca_test = PCA(n_components=16, svd_solver='randomized', whiten=True).fit(X_test)
 
-# separating the lables
-c1 = Data_mnist[Data_mnist.iloc[:,-1] ==  1]
-c2 = Data_mnist[Data_mnist.iloc[:,-1] == 0]
+X_train_pca = pca_train.transform(X_train)
+X_test_pca = pca_test.transform(X_test)
 
-c1_small = c1.sample(n = 5000, random_state = 1)
-c2_small = c2.sample(n = 5000, random_state = 1)
-
-Small_mnist = pd.concat([c1_small, c2_small])
-
-# shuffle data
-Small_mnist = Small_mnist.sample(frac = 1 )
-
-X = Small_mnist.iloc[:,:-1]
-y = Small_mnist.iloc[:,-1]
-y[y==0] = -1
+X_train = pd.DataFrame(X_train_pca)
+X_test = pd.DataFrame(X_test_pca)
 
 # Filtering data:
-X_new, y_new = remove_noise(X, y)
-
-# Train and Test split
-X_train, X_test, y_train, y_test = train_test_split(X_new, y_new, test_size=0.2, random_state=42)
+#X_new, y_new = remove_noise(X, y)
 
 # Comparing methods:
 method = ["parallel", "nn_clas", "pseudo_support_edges"]
@@ -61,8 +47,8 @@ for model in method:
 
     print(" \n Method: {0} \n AUC: {1:.4f} \n Runtime: {2:.4f} \n".format(model, result, runtime))
 
-    f = open("results.txt", "a+")
-    f.write("Dataset: %d \n", data_name)
-
-
-
+    f = open("results_mnist.txt", "a+")
+    f.write("\n\nMétodo: %s \n" % model)
+    f.write("AUC: %d \n" % result)
+    f.write("Runtime: %d \n" % runtime)
+    f.close()
