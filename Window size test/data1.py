@@ -36,7 +36,7 @@ for split in window_size:
 
     kf = KFold(n_splits=k, shuffle = True, random_state = 1)
     results = []
-    runtime = []
+    runtimes = []
 
 
 
@@ -49,12 +49,12 @@ for split in window_size:
 
         #print("\n AUC: {0:.4f} \n Runtime: {1:.4f} \n".format(result, runtime))
 
-        runtime.append(runtime)
+        runtimes.append(runtime)
         results.append(result)
 
 
     mean_AUC = sum(results)/len(results)
-    mean_runtime = sum(runtime)/len(runtime)
+    mean_runtime = sum(runtimes)/len(runtimes)
     std = statistics.stdev(results)
 
     f = open("results_window_size.txt", "a+")
