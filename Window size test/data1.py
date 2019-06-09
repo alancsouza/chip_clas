@@ -47,7 +47,7 @@ for split in window_size:
 
         y_hat, y_test, result, runtime = chip_clas_new(X_train, X_test, y_train, y_test, method = "parallel", split_size = split)
 
-        //print("\n AUC: {0:.4f} \n Runtime: {1:.4f} \n".format(result, runtime))
+        #print("\n AUC: {0:.4f} \n Runtime: {1:.4f} \n".format(result, runtime))
 
         runtime.append(runtime)
         results.append(result)
