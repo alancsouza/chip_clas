@@ -102,6 +102,3 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-
-Large\ datasets/keras
-Large\ datasets/keras/lib/python3.6/site-packages/tensorflow/python/_pywrap_tensorflow_internal.so
