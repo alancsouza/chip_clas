@@ -27,35 +27,39 @@ y[y == 0] = -1
 # Filtering data:
 X_new, y_new = remove_noise(X, y)
 
-# Implementing kfold cross validation:
-k = 10
 
-kf = KFold(n_splits=k, shuffle = True, random_state = 1)
-results = []
-runtime = []
+window_size = [50, 30, 20, 10, 5, 1]
 
-split = 10
+for split in window_size:
+    # Implementing kfold cross validation:
+    k = 10
 
-for train_index, test_index in kf.split(X_new):
-    
-    X_train, X_test = X_new.iloc[train_index], X_new.iloc[test_index]
-    y_train, y_test = y_new.iloc[train_index], y_new.iloc[test_index]
-
-    y_hat, y_test, result, runtime = chip_clas_new(X_train, X_test, y_train, y_test, method = "parallel", split_size = split)
-
-    print("\n AUC: {0:.4f} \n Runtime: {1:.4f} \n".format(result, runtime))
-
-    runtime.append(runtime)
-    results.append(result)
+    kf = KFold(n_splits=k, shuffle = True, random_state = 1)
+    results = []
+    runtimes = []
 
 
-mean_AUC = sum(results)/len(results)
-mean_runtime = sum(runtime)/len(runtime)
-std = statistics.stdev(results)
 
-f = open("results_window_size.txt", "a+")
-f.write("\n\nSplit_size: %d \n" % split)
-f.write("AUC: %d \n" % mean_AUC)
-f.write("Std Deviation: %d \n" % std)
-f.write("Runtime: %d \n" % mean_runtime)
-f.close()
+    for train_index, test_index in kf.split(X_new):
+        
+        X_train, X_test = X_new.iloc[train_index], X_new.iloc[test_index]
+        y_train, y_test = y_new.iloc[train_index], y_new.iloc[test_index]
+
+        y_hat, y_test, result, runtime = chip_clas_new(X_train, X_test, y_train, y_test, method = "parallel", split_size = split)
+
+        #print("\n AUC: {0:.4f} \n Runtime: {1:.4f} \n".format(result, runtime))
+
+        runtimes.append(runtime)
+        results.append(result)
+
+
+    mean_AUC = sum(results)/len(results)
+    mean_runtime = sum(runtimes)/len(runtimes)
+    std = statistics.stdev(results)
+
+    f = open("results_window_size.txt", "a+")
+    f.write("\n\nSplit_size: %d \n" % split)
+    f.write("AUC: %d \n" % mean_AUC)
+    f.write("Std Deviation: %d \n" % std)
+    f.write("Runtime: %d \n" % mean_runtime)
+    f.close()
