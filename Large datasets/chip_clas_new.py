@@ -3,7 +3,7 @@ import time
 
 # inputs: X_train, y_train, X_test, y_test
 
-def chip_clas_new(X_train, X_test, y_train, y_test, method):
+def chip_clas_new(X_train, X_test, y_train, y_test, method, split_size):
     
     """
     Available methods:
@@ -12,13 +12,11 @@ def chip_clas_new(X_train, X_test, y_train, y_test, method):
     pseudo_support_edges = Implements pseudo_support method
 
     """
-    
-    runtime = []
 
     start = time.time()
 
     if method == "parallel" :
-        y_hat = parallel_concurrent(X_train, y_train, X_test, y_test)      
+        y_hat = parallel_concurrent(X_train, y_train, X_test, y_test, split_size)      
 
     elif method == "nn_clas":
         y_hat  = nn_clas(X_train, y_train, X_test, y_test)
