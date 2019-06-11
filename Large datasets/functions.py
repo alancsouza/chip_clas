@@ -76,6 +76,7 @@ def remove_noise(X, y):
   return X_new, y_new
 
 # Split the data for concurrent computing
+'''
 def split(X_train, y_train):
     if X_train.shape[0] > 400: # define the slot size
         split_size = round(X_train.shape[0]/1000) # changing to 1000 for large data sets
@@ -88,6 +89,16 @@ def split(X_train, y_train):
     data_split = np.array_split(data_train, split_size)
 
     return data_split, split_size
+'''
+
+def split(X_train, y_train, split_size):
+    
+    data_train = np.c_[X_train, y_train]
+    np.random.shuffle(data_train)
+
+    data_split = np.array_split(data_train, split_size)
+
+    return data_split
 
 
 # Finding the separation border:
@@ -268,9 +279,9 @@ def nn_clas(X_train, y_train, X_test, y_test):
   return y_hat
 
 
-def parallel_concurrent(X_train, y_train, X_test, y_test):
+def parallel_concurrent(X_train, y_train, X_test, y_test, split_size):
   # Splitting the data for concurrent computing
-  data_split, split_size = split(X_train, y_train)
+  data_split = split(X_train, y_train, split_size)
   
   # list for adding the support edges from each slot
   Support = []
