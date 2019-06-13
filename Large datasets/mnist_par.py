@@ -58,7 +58,7 @@ X_test = pd.DataFrame(X_test)
 y_train = pd.DataFrame(y_train)
 y_test = pd.DataFrame(y_test)
 
-split = 6
+split = 10
 model = "parallel"
 
 y_hat, y_test, result, runtime = chip_clas_new(X_train, X_test, y_train, y_test, method = "parallel", split_size = split)
