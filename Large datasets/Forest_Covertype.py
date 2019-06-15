@@ -16,18 +16,41 @@ X = data.drop('Cover_Type', axis = 1)
 y = data.loc[:, 'Cover_Type']
 
 # Class 2 vs rest
-y_binary = (y  == 2).astype(np.int)
+y = (y  == 2).astype(np.int)
 
 # Preprocessing
 min_max_scaler = preprocessing.MinMaxScaler()
 X = pd.DataFrame(min_max_scaler.fit_transform(X))
 
+# getting a smaller subset of the mnist dataset
+Data = np.c_[X, y]
+
+Data = pd.DataFrame(Data)
+
+# separating the lables
+c1 = Data[Data.iloc[:,-1] ==  1]
+c2 = Data[Data.iloc[:,-1] == 0]
+
+c1_small = c1.sample(n = 5000, random_state = 1)
+c2_small = c2.sample(n = 5000, random_state = 1)
+
+Small_data = pd.concat([c1_small, c2_small])
+
+# shuffle data
+Small_data = Small_data.sample(frac = 1 )
+
+X = Small_data.iloc[:,:-1]
+y = Small_data.iloc[:,-1]
+y[y==0] = -1
+
 # Filtering data:
 #X_new, y_new = remove_noise(X, y_binary)
 
 # Train and Test split
-X_train, X_test, y_train, y_test = train_test_split(X, y_binary, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
+print("Training size: {}".format(X_train.shape))
+print("Test size: {}".format(X_test.shape))
 # Comparing methods:
 method = ["nn_clas", "parallel", "pseudo_support_edges"]
 
