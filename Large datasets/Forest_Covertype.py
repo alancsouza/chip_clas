@@ -52,7 +52,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 print("Training size: {}".format(X_train.shape))
 print("Test size: {}".format(X_test.shape))
 # Comparing methods:
-method = ["nn_clas", "parallel", "pseudo_support_edges"]
+method = ["parallel", "pseudo_support_edges"]
 
 print("Dataset: {}".format(data_name))
 
@@ -62,6 +62,6 @@ for model in method:
 
     print(" \n Method: {0} \n AUC: {1:.4f} \n Runtime: {2:.4f} \n".format(model, result, runtime))
 
-    f = open("results.txt", "a+")
-    f.write("Dataset: %d \n", data_name)
+    #f = open("results.txt", "a+")
+    #f.write("Dataset: %d \n", data_name)
 
