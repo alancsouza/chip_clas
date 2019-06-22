@@ -1,0 +1,44 @@
+
+
+Database: Banknote Auth. 
+Size before filter: 1372 
+Dimension: 4 
+Size after filter: 1178 
+Train Size: 942 
+
+Split: 50 
+AUC: 1.000000 
+Runtime: 922 
+Final_split_size: 614 
+arestas_suporte_size: 164 
+
+Split: 30 
+AUC: 1.000000 
+Runtime: 839 
+Final_split_size: 582 
+arestas_suporte_size: 166 
+
+Split: 20 
+AUC: 1.000000 
+Runtime: 823 
+Final_split_size: 554 
+arestas_suporte_size: 166 
+
+Split: 10 
+AUC: 1.000000 
+Runtime: 1040 
+Final_split_size: 477 
+arestas_suporte_size: 154 
+
+Split: 5 
+AUC: 1.000000 
+Runtime: 706 
+Final_split_size: 386 
+arestas_suporte_size: 157 
+
+Split: 1 
+AUC: 1.000000 
+Runtime: 1967 
+Final_split_size: 163 
+arestas_suporte_size: 163 
+#######################################################################
