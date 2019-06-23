@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-data3 = fertility
+data2 = Australian credit
 """
 
 from chip_clas_new import chip_clas_new
@@ -12,20 +12,18 @@ from sklearn.preprocessing import MinMaxScaler
 import numpy as np
 import pandas as pd
 
-data_name = "fertility"
+data_name = "Australian credit"
 print(data_name)
 
-# Processing the data
-url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/00244/fertility_Diagnosis.txt'
-data = pd.read_csv(url, header = None)
+url = 'http://archive.ics.uci.edu/ml/machine-learning-databases/statlog/australian/australian.dat'
+
+data = pd.read_csv(url, sep='\s+', header=None, skiprows=1)
 
 X = data.iloc[:,:-1]
 min_max_scaler = MinMaxScaler(feature_range=(-1, 1)) # Normalizing data between -1 and 1
 X = pd.DataFrame(min_max_scaler.fit_transform(X))
 
 y = data.iloc[:,-1].copy()
-y = y.astype('category')
-y = y.cat.codes
 y[y == 0] = -1
 
 # Filtering data:
@@ -41,8 +39,7 @@ f.write("Dimension: %d \n" % X.shape[1])
 f.write("Size after filter: %d \n" % X_new.shape[0])
 f.write("Train Size: %d \n" % X_train.shape[0])
 
-#window_size = [50, 30, 20, 10, 5, 1]
-window_size = [2, 1]
+window_size = [50, 30, 20, 10, 5, 1]
 
 for split in window_size:
 

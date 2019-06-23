@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-data1 = Banknote Auth.
-"""
+data6 = Breast cancer
 
+"""
 from chip_clas_new import chip_clas_new
 import statistics
 from functions import remove_noise
@@ -12,18 +12,26 @@ from sklearn.preprocessing import MinMaxScaler
 import numpy as np
 import pandas as pd
 
-data_name = "Banknote Auth."
+data_name = "Breast cancer"
 print(data_name)
 
-url = "https://archive.ics.uci.edu/ml/machine-learning-databases/00267/data_banknote_authentication.txt"
-data = pd.read_csv(url, header = None)
+url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/breast-cancer-wisconsin/breast-cancer-wisconsin.data'
+data1 = pd.read_csv(url, sep=',', header=None, skiprows=1)
+
+data = data1.iloc[:,1:].copy() # the first is the id
+
+# converting object data into category dtype
+data.iloc[:,5] = data.iloc[:,5].astype('category') 
+# encoding labels
+data.iloc[:,5] = data.iloc[:,5].cat.codes
 
 X = data.iloc[:,:-1]
-
 min_max_scaler = MinMaxScaler(feature_range=(-1, 1)) # Normalizing data between -1 and 1
 X = pd.DataFrame(min_max_scaler.fit_transform(X))
-y = data.iloc[:,-1].copy()
-y[y == 0] = -1
+
+y = data.iloc[:,-1].copy() #  Class: (2 for benign, 4 for malignant cancer)
+y[y == 2] = 1
+y[y == 4] = -1
 
 # Filtering data:
 X_new, y_new = remove_noise(X, y)
