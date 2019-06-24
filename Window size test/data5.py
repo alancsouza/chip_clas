@@ -15,7 +15,7 @@ import pandas as pd
 data_name = "diabetes"
 print(data_name)
 
-url = 'https://raw.githubusercontent.com/alancsouza/research_project/master/datasets/diabetes.csv'
+url = 'https://raw.githubusercontent.com/alancsouza/chip_clas/master/datasets/diabetes.csv'
 data = pd.read_csv(url)
 
 X = data.iloc[:,:-1]
