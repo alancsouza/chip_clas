@@ -1,5 +1,62 @@
 
 
+Database: Australian credit 
+Size before filter: 689 
+Dimension: 14 
+Size after filter: 433 
+Train Size: 346 
+
+
+Database: Breast cancer 
+Size before filter: 698 
+Dimension: 9 
+Size after filter: 557 
+Train Size: 445 
+
+Split: 50 
+AUC: 0.916667 
+Runtime: 97 
+Final_split_size: 207 
+arestas_suporte_size: 123 
+
+Split: 30 
+AUC: 0.916667 
+Runtime: 95 
+Final_split_size: 199 
+arestas_suporte_size: 118 
+
+Split: 20 
+AUC: 0.904167 
+Runtime: 85 
+Final_split_size: 178 
+arestas_suporte_size: 115 
+
+Split: 10 
+AUC: 0.916667 
+Runtime: 81 
+Final_split_size: 143 
+arestas_suporte_size: 109 
+
+Split: 5 
+AUC: 0.916667 
+Runtime: 130 
+Final_split_size: 157 
+arestas_suporte_size: 123 
+
+Split: 1 
+AUC: 0.916667 
+Runtime: 459 
+Final_split_size: 145 
+arestas_suporte_size: 144 
+#######################################################################
+
+Database: German Credit. 
+Size before filter: 1000 
+Dimension: 24 
+Size after filter: 594 
+Train Size: 475 
+
+
 Database: Banknote Auth. 
 Size before filter: 1372 
 Dimension: 4 
@@ -8,37 +65,43 @@ Train Size: 942
 
 Split: 50 
 AUC: 1.000000 
-Runtime: 922 
-Final_split_size: 614 
-arestas_suporte_size: 164 
+Runtime: 789 
+Final_split_size: 598 
+arestas_suporte_size: 152 
 
 Split: 30 
 AUC: 1.000000 
-Runtime: 839 
-Final_split_size: 582 
-arestas_suporte_size: 166 
+Runtime: 757 
+Final_split_size: 577 
+arestas_suporte_size: 160 
 
 Split: 20 
 AUC: 1.000000 
-Runtime: 823 
-Final_split_size: 554 
-arestas_suporte_size: 166 
+Runtime: 717 
+Final_split_size: 549 
+arestas_suporte_size: 156 
 
 Split: 10 
 AUC: 1.000000 
-Runtime: 1040 
-Final_split_size: 477 
-arestas_suporte_size: 154 
+Runtime: 644 
+Final_split_size: 475 
+arestas_suporte_size: 156 
 
 Split: 5 
 AUC: 1.000000 
-Runtime: 706 
-Final_split_size: 386 
-arestas_suporte_size: 157 
+Runtime: 664 
+Final_split_size: 383 
+arestas_suporte_size: 156 
 
 Split: 1 
 AUC: 1.000000 
-Runtime: 1967 
+Runtime: 1921 
 Final_split_size: 163 
 arestas_suporte_size: 163 
 #######################################################################
+
+Database: Australian credit 
+Size before filter: 689 
+Dimension: 14 
+Size after filter: 433 
+Train Size: 346 

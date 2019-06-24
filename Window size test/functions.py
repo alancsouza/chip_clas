@@ -288,8 +288,10 @@ def parallel_concurrent(X_train, y_train, X_test, y_test, split_size):
 
   with concurrent.futures.ProcessPoolExecutor() as executor:
       for data, S in zip(data_split, executor.map(support_edges, data_split)):
-          Support.append(S)
-      
+          print("S shape {}".format(S.shape[1]))
+          print("Data shape {}".format(data.shape[1]))
+          if data.shape[1] == S.shape[1]: 
+            Support.append(S)
   Support_arr = np.vstack(Support) # transform list to array
 
   data_train_new = pd.DataFrame(Support_arr)
