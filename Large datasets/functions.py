@@ -70,9 +70,6 @@ def remove_noise(X, y):
   X_new = X.drop(noise)
   y_new = y.drop(noise)
   
-  #print("{} samples where removed from the data. \n".format(X.shape[0]-X_new.shape[0]))
-  #print("The data set now has {} samples ".format(X.shape[0]))
-
   return X_new, y_new
 
 # Split the data for concurrent computing
@@ -288,8 +285,8 @@ def parallel_concurrent(X_train, y_train, X_test, y_test, split_size):
 
   with concurrent.futures.ProcessPoolExecutor() as executor:
       for data, S in zip(data_split, executor.map(support_edges, data_split)):
-          print("S shape {}".format(S.shape[1]))
-          print("Data shape {}".format(data.shape[1]))
+          print("S shape {}".format(S.shape))
+          print("Data shape {}".format(data.shape))
           if data.shape[1] == S.shape[1]: 
             Support.append(S)
   Support_arr = np.vstack(Support) # transform list to array
