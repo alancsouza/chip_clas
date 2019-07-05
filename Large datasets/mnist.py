@@ -69,7 +69,7 @@ f.write("Dimension: %d \n" % X.shape[1])
 
 f.write("Train Size: %d \n" % X_train.shape[0])
 
-window_size = [5, 1000]
+window_size = [1]
 
 for split in window_size:
 
