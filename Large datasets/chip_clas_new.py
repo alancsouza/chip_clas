@@ -16,7 +16,7 @@ def chip_clas_new(X_train, X_test, y_train, y_test, method, split_size):
     start = time.time()
 
     if method == "parallel" :
-        y_hat = parallel_concurrent(X_train, y_train, X_test, y_test, split_size)      
+        y_hat, final_split_size, arestas_suporte_size = parallel_concurrent(X_train, y_train, X_test, y_test, split_size)      
 
     elif method == "nn_clas":
         y_hat  = nn_clas(X_train, y_train, X_test, y_test)
@@ -30,9 +30,8 @@ def chip_clas_new(X_train, X_test, y_train, y_test, method, split_size):
 
     end =  time.time()
     runtime = end - start
-
     results = compute_AUC(y_test, y_hat)
     
-    return y_hat, y_test, results, runtime
+    return y_hat, y_test, results, runtime, final_split_size, arestas_suporte_size 
 
 

@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 
 data_name = "mnist"
+print(data_name)
 
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
 
@@ -61,18 +62,25 @@ y_test = pd.DataFrame(y_test)
 # Filtering data:
 #X_new, y_new = remove_noise(X, y)
 
-# Comparing methods:
-method = ["parallel", "nn_clas", "pseudo_support_edges"]
+f = open("results_window_size.txt", "a+")
+f.write("\n\nDatabase: %s \n" % data_name)
+f.write("Size: %d \n" % X.shape[0])
+f.write("Dimension: %d \n" % X.shape[1])
 
-print("Dataset: {}".format(data_name))
+f.write("Train Size: %d \n" % X_train.shape[0])
 
-for model in method:
-    y_hat, y_test, result, runtime = chip_clas_new(X_train, X_test, y_train, y_test, method = model)
+window_size = [1]
 
-    print(" \n Method: {0} \n AUC: {1:.4f} \n Runtime: {2:.4f} \n".format(model, result, runtime))
+for split in window_size:
 
-    f = open("results_mnist.txt", "a+")
-    f.write("\n\nMétodo: %s \n" % model)
-    f.write("AUC: %d \n" % result)
-    f.write("Runtime: %d \n" % runtime)
-    f.close()
+    y_hat, y_test, result, runtime, final_split_size, arestas_suporte_size  = chip_clas_new(X_train, X_test, y_train, y_test, method = "parallel", split_size = split)
+
+
+    f.write("\nSplit: %d \n" % split)
+    f.write("AUC: %f \n" % result)
+    f.write("Runtime: %f \n" % runtime)
+    f.write("Final_split_size: %d \n" % final_split_size)
+    f.write("arestas_suporte_size: %d \n" % arestas_suporte_size)
+        
+f.write("#######################################################################")        
+f.close()

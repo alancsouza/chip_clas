@@ -70,9 +70,6 @@ def remove_noise(X, y):
   X_new = X.drop(noise)
   y_new = y.drop(noise)
   
-  #print("{} samples where removed from the data. \n".format(X.shape[0]-X_new.shape[0]))
-  #print("The data set now has {} samples ".format(X.shape[0]))
-
   return X_new, y_new
 
 # Split the data for concurrent computing
@@ -288,19 +285,23 @@ def parallel_concurrent(X_train, y_train, X_test, y_test, split_size):
 
   with concurrent.futures.ProcessPoolExecutor() as executor:
       for data, S in zip(data_split, executor.map(support_edges, data_split)):
-          Support.append(S)
-      
+          print("S shape {}".format(S.shape))
+          print("Data shape {}".format(data.shape))
+          if data.shape[1] == S.shape[1]: 
+            Support.append(S)
   Support_arr = np.vstack(Support) # transform list to array
 
   data_train_new = pd.DataFrame(Support_arr)
+  final_split_size = data_train_new.shape[0]
       
   # Finding the new set of support edges
   arestas_suporte = support_edges(data_train_new)
+  arestas_suporte_size = arestas_suporte.shape[0]
 
   # Classification:
   y_hat = classify_data(X_test, y_test, arestas_suporte)
 
-  return y_hat
+  return y_hat, final_split_size, arestas_suporte_size
 
 def pseudo_support_edges(X_train, y_train, X_test, y_test):
   
@@ -309,85 +310,4 @@ def pseudo_support_edges(X_train, y_train, X_test, y_test):
   y_hat = classify_data(X_test, y_test, support_edges)
 
   return y_hat
-
-"""
-def chip_clas(X, y, method , kfold = 10, test_size = 0.2):
-
-  
-    Available methods:
-    parallel: Implements concurrent futures and parallelization technique
-    nn_clas: Implements nn_clas classification
-    pseudo_support_edges = Implements pseudo_support method
-
-
-
-  runtime = []
-
-  if kfold > 0 : 
-
-    kf = KFold(n_splits = kfold, shuffle = True, random_state = 1)
-
-    results = []
-
-    for train_index, test_index in kf.split(X_new):
-
-      X_train, X_test = X_new.iloc[train_index], X_new.iloc[test_index]
-      y_train, y_test = y_new.iloc[train_index], y_new.iloc[test_index]
-
-      if method == "parallel" :
-        start = time.time() 
-        y_hat = parallel_concurrent(X_train, y_train, X_test, y_test)      
-        end = time.time()
-
-      elif method == "nn_clas":
-        start = time.time()
-        y_hat  = nn_clas(X_train, y_train, X_test, y_test)
-        end = time.time()
-
-      elif method == "pseudo_support_edges" :
-        start = time.time()
-        y_hat = pseudo_support_edges(X_train, y_train, X_test, y_test)
-        end = time.time()
-
-      else :
-        print("Method not available")
-        return None
-
-      AUC = compute_AUC(y_test, y_hat)
-      results.append(AUC)
-      runtime.append(end-start)
-
-    results = pd.DataFrame(results)
-    runtime = pd.DataFrame(runtime)
-      
-
-
-  elif kfold == 0:
-
-    X_train, X_test, y_train, y_test = train_test_split(X_new, y_new, test_size)
-    start = time.time()
-    if method == "parallel" :
-        y_hat = parallel_concurrent(X_train, y_train, X_test, y_test)      
-
-    elif method == "nn_clas":
-      y_hat  = nn_clas(X_train, y_train, X_test, y_test)
-
-    elif method == "pseudo_support_edges":
-      y_hat = pseudo_support_edges(X_train, y_train, X_test, y_test)
-
-    else :
-      print("Method not available")
-      return None
-    end =  time.time()
-    runtime = end - start
-    results = compute_AUC(y_test, y_hat)
-  else :
-    print("Error: kfold number invalid")
-
-
-  return y_hat, y_test, results, runtime
-
-"""
-
-
-  
+ 
