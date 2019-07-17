@@ -73,29 +73,14 @@ def remove_noise(X, y):
   return X_new, y_new
 
 # Split the data for concurrent computing
-'''
-def split(X_train, y_train):
-    if X_train.shape[0] > 400: # define the slot size
-        split_size = round(X_train.shape[0]/1000) # changing to 1000 for large data sets
-    else:
-        split_size = round(X_train.shape[0]/50)
-
-    data_train = np.c_[X_train, y_train]
-    np.random.shuffle(data_train)
-
-    data_split = np.array_split(data_train, split_size)
-
-    return data_split, split_size
-'''
-
 def split(X_train, y_train, split_size):
     
-    data_train = np.c_[X_train, y_train]
-    np.random.shuffle(data_train)
+  data_train = np.c_[X_train, y_train]
+  np.random.shuffle(data_train)
 
-    data_split = np.array_split(data_train, split_size)
+  data_split = np.array_split(data_train, split_size)
 
-    return data_split
+  return data_split
 
 
 # Finding the separation border:
