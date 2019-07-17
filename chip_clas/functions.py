@@ -11,7 +11,6 @@ import random
 import time
 import copy
 import concurrent.futures
-import jason
 random.seed(1)
 
 # Compute Adjacency matrix for the Grabriel Graph
@@ -69,9 +68,6 @@ def remove_noise(X, y):
   # Filtering the data
   X_new = X.drop(noise)
   y_new = y.drop(noise)
-  
-  #print("{} samples where removed from the data. \n".format(X.shape[0]-X_new.shape[0]))
-  #print("The data set now has {} samples ".format(X.shape[0]))
 
   return X_new, y_new
 
@@ -318,10 +314,10 @@ def chip_clas(X, y, method , kfold = 10, test_size = 0.2):
 
     results = []
 
-    for train_index, test_index in kf.split(X_new):
+    for train_index, test_index in kf.split(X):
 
-      X_train, X_test = X_new.iloc[train_index], X_new.iloc[test_index]
-      y_train, y_test = y_new.iloc[train_index], y_new.iloc[test_index]
+      X_train, X_test = X.iloc[train_index], X.iloc[test_index]
+      y_train, y_test = y.iloc[train_index], y.iloc[test_index]
 
       if method == "parallel" :
         start = time.time() 
@@ -353,7 +349,7 @@ def chip_clas(X, y, method , kfold = 10, test_size = 0.2):
 
   elif kfold == 0:
 
-    X_train, X_test, y_train, y_test = train_test_split(X_new, y_new, test_size)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size)
     start = time.time()
     if method == "parallel" :
         y_hat = parallel_concurrent(X_train, y_train, X_test, y_test)      
@@ -374,9 +370,4 @@ def chip_clas(X, y, method , kfold = 10, test_size = 0.2):
     print("Error: kfold number invalid")
 
 
-  return y_hat, y_test, results, runtime
-
-
-
-
-  
+  return y_hat, y_test, results, runtime 
