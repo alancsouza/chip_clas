@@ -12,7 +12,6 @@ def chip_clas_new(X_train, X_test, y_train, y_test, method, split_size):
     pseudo_support_edges = Implements pseudo_support method
 
     """
-    print("Myname")
     start = time.time()
 
     if method == "parallel" :
