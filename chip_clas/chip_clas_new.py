@@ -34,4 +34,6 @@ def chip_clas_new(X_train, X_test, y_train, y_test, method, split_size):
     
     return y_hat, y_test, results, runtime, final_split_size, arestas_suporte_size 
 
+    #teste
+
 
